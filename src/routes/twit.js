@@ -11,7 +11,7 @@ const twit = new Twit(twitOptions);
 // });
 
 router.post('/', (req, res) => {
-  res.status(201).send('Hello');
+  res.status(201).json(req.body);
 });
 
 module.exports = router;
