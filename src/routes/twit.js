@@ -5,13 +5,19 @@ const { twitOptions } = require('../../config');
 const router = express.Router();
 const twit = new Twit(twitOptions);
 
-// twit.post('statuses/update', { status: 'hello world!' }, (err, data, res) => {
-//   if (err) throw new Error();
-//   console.log(data);
-// });
-
 router.post('/', (req, res) => {
-  res.status(201).json(req.body);
+  const { status } = req.body;
+
+  if (typeof status !== 'string') {
+    const error = new Error('<status> must be string only');
+    error.code = 1;
+    throw error;
+  }
+
+  twit.post('statuses/update', { status }, (error, data, $res) => {
+    if (error) throw error;
+    res.status(201).json(data);
+  });
 });
 
 module.exports = router;
