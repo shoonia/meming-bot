@@ -3,14 +3,17 @@ module.exports = (req, res, next) => {
 
   if (typeof link !== 'string') {
     res.status(400).json({ error: '<link> must be a string only' });
+    return;
   }
 
   if (typeof title !== 'string') {
     res.status(400).json({ error: '<title> must be a string only' });
+    return;
   }
 
   if (typeof body !== 'string') {
     res.status(400).json({ error: '<body> must be a string only' });
+    return;
   }
 
   next();
