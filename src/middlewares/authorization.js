@@ -1,12 +1,15 @@
-const { AES, enc } = require('crypto-js');
+const { HmacSHA512 } = require('crypto-js');
 const { SECRET_KEY } = require('../../config');
 
 const isTokenValid = (token, body) => {
-  try {
-    const decryptToken = AES.decrypt(token, SECRET_KEY).toString(enc.Utf8);
-    const data = JSON.parse(decryptToken);
+  if (token === undefined) {
+    return false;
+  }
 
-    return Object.entries(data).every(([key, value]) => body[key] === value);
+  try {
+    const json = JSON.stringify(body);
+    const hash = HmacSHA512(json, SECRET_KEY);
+    return token === hash.toString();
   } catch (error) { }
 
   return false;
