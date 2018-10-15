@@ -11,5 +11,6 @@ module.exports = {
     timeout_ms: 60 * 1000,
     // strictSSL: true,
   },
-  port: process.env.PORT,
+  PORT: process.env.PORT,
+  SECRET_KEY: process.env.SECRET_KEY,
 };
