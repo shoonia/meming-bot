@@ -8,7 +8,7 @@ const isTokenValid = (token, body) => {
 
   try {
     const json = JSON.stringify(body);
-    const hash = HmacSHA512(json, SECRET_KEY);
+    const hash = HmacSHA512(json, (SECRET_KEY + process.env.PUBLIC_KEY));
     return token === hash.toString();
   } catch (error) { }
 
