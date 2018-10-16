@@ -1,16 +1,21 @@
 const { HmacSHA512 } = require('crypto-js');
-const { SECRET_KEY } = require('../../config');
 
 const isTokenValid = (token, body) => {
-  if (token === undefined) {
+  const { SECRET_KEY, PUBLIC_KEY } = process.env;
+
+  if (token === undefined || typeof PUBLIC_KEY !== 'string') {
     return false;
   }
 
   try {
     const json = JSON.stringify(body);
-    const hash = HmacSHA512(json, (SECRET_KEY + process.env.PUBLIC_KEY));
+    const hash = HmacSHA512(json, (SECRET_KEY + PUBLIC_KEY));
     return token === hash.toString();
-  } catch (error) { }
+  } catch (o_0) {
+    // I'm so sad!
+  } finally {
+    process.env.PUBLIC_KEY = undefined;
+  }
 
   return false;
 };
