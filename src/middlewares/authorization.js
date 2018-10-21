@@ -23,7 +23,7 @@ const isTokenValid = (token, body) => {
 module.exports = (req, res, next) => {
   const token = req.get('authorization');
 
-  if (token) {
+  if (!token) {
     res.sendStatus(401);
     return;
   }
