@@ -13,8 +13,11 @@ router.post('/', bodyValidator, authorization, (req, res) => {
   const status = twitterTemp(req.body);
 
   twit.post('statuses/update', { status }, (error, data) => {
-    if (error) throw error;
-    res.status(201).json(data);
+    if (error) {
+      res.sendStatus(503);
+    } else {
+      res.status(201).json(data);
+    }
   });
 });
 

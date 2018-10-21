@@ -5,7 +5,7 @@ const { PORT } = require('../config');
 const headers = require('./middlewares/headers');
 const errors = require('./middlewares/errors');
 const twitRouter = require('./routes/twit');
-const publicKey = require('./routes/public-key');
+const publicKeyRouter = require('./routes/public-key');
 
 const app = express();
 
@@ -16,8 +16,13 @@ app.post('/heroku-wake-up', (req, res) => {
 });
 
 app.use(bodyParser.json());
-app.use('/public-key', publicKey);
+app.use('/public-key', publicKeyRouter);
 app.use('/twit', twitRouter);
+
+app.get('*', (req, res) => {
+  res.sendStatus(501);
+});
+
 app.use(errors);
 
 app.listen(PORT, () => {

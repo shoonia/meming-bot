@@ -3,7 +3,7 @@ const { HmacSHA512 } = require('crypto-js');
 const isTokenValid = (token, body) => {
   const { SECRET_KEY, PUBLIC_KEY } = process.env;
 
-  if (token === undefined || typeof PUBLIC_KEY !== 'string') {
+  if (typeof PUBLIC_KEY !== 'string') {
     return false;
   }
 
@@ -21,18 +21,16 @@ const isTokenValid = (token, body) => {
 };
 
 module.exports = (req, res, next) => {
-  const auth = req.get('authorization');
-  let token;
+  const token = req.get('authorization');
 
-  if (auth) {
-    token = auth.split(' ')[1];
+  if (token) {
+    res.sendStatus(401);
+    return;
   }
 
   if (isTokenValid(token, req.body)) {
     next();
   } else {
-    res.status(403).json({
-      error: 'Forbidden',
-    });
+    res.sendStatus(403);
   }
 }

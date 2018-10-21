@@ -1,20 +1,12 @@
+const isString = (...props) =>
+  props.every(prop => typeof prop === 'string');
+
 module.exports = (req, res, next) => {
   const { link, title, body } = req.body;
 
-  if (typeof link !== 'string') {
-    res.status(400).json({ error: '<link> must be a string only' });
-    return;
+  if (isString(link, title, body)) {
+    next();
+  } else {
+    res.sendStatus(400);
   }
-
-  if (typeof title !== 'string') {
-    res.status(400).json({ error: '<title> must be a string only' });
-    return;
-  }
-
-  if (typeof body !== 'string') {
-    res.status(400).json({ error: '<body> must be a string only' });
-    return;
-  }
-
-  next();
-};
+}
