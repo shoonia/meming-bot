@@ -1,24 +1,25 @@
 const express = require('express');
-const Twit = require('twit');
 
-const { twitOptions } = require('../../config');
 const authorization = require('../middlewares/authorization');
 const bodyValidator = require('../middlewares/bodyValidator');
 const twitterTemp = require('../templates/twitter');
+const fetchImage = require('../fetch-image');
+const sendTwit = require('../send-twit');
 
 const router = express.Router();
-const twit = new Twit(twitOptions);
 
-router.post('/', bodyValidator, authorization, (req, res) => {
+router.post('/', bodyValidator, authorization, async (req, res) => {
+  const { image } = req.body;
   const status = twitterTemp(req.body);
 
-  twit.post('statuses/update', { status }, (error, data) => {
-    if (error) {
-      res.sendStatus(503);
-    } else {
-      res.status(201).json(data);
-    }
-  });
+  try {
+    const imgBase64 = await fetchImage(image);
+    const data = await sendTwit(imgBase64, status);
+
+    res.status(201).json(data);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 });
 
 module.exports = router;
