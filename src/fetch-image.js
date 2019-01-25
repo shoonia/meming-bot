@@ -10,9 +10,7 @@ module.exports = url => new Promise((resolve, reject) => {
       data += chunk;
     });
 
-    res.on('end', () => {
-      resolve(data);
-    });
+    res.on('end', () => resolve(data));
   };
 
   https.get(url, handler).on('error', reject);
