@@ -1,5 +1,5 @@
 const { isString } = require('util');
-const { HmacSHA512 } = require('crypto-js');
+const HmacSHA512 = require('crypto-js/hmac-sha512');
 
 const isTokenValid = (token, body) => {
   const { SECRET_KEY, PUBLIC_KEY } = process.env;
