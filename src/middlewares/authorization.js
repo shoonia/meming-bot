@@ -26,13 +26,12 @@ module.exports = (req, res, next) => {
   const token = req.get('authorization');
 
   if (!token) {
-    res.sendStatus(401);
-    return;
+    return res.sendStatus(401);
   }
 
   if (isTokenValid(token, req.body)) {
-    next();
-  } else {
-    res.sendStatus(403);
+    return next();
   }
+
+  res.sendStatus(403);
 }
